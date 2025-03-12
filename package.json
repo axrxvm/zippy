@@ -1,0 +1,21 @@
+{
+  "name": "Zippy",
+  "description": "Zippy is a minimalist and efficient URL shortening service designed for simplicity and speed.",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dns": "^0.2.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.6.1",
+    "uuid": "^9.0.1"
+  },
+  "author": "Aarav Mehta",
+  "license": "SEE LICENSE IN LICENSE"
+}
