@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/models/urlModel.test.js && node tests/models/userModel.test.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -13,7 +13,6 @@
     "dns": "^0.2.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongoose": "^7.6.1",
     "uuid": "^9.0.1"
   },
   "author": "Aarav Mehta",
