@@ -1,21 +1,22 @@
 const express = require('express');
 const apiRouter = express.Router();
-// Updated to use specific functions from urlModel.js
 const { findUrlByShortUrl, saveUrl } = require("./models/urlModel");
 const uuidv4 = require('uuid').v4;
 
 apiRouter.use(express.json());
 
 apiRouter.post('/shorten', async (req, res) => {
+    const bodyUrl = req.body?.url;
+    const bodyShortUrl = req.body?.shorturl;
 
-    const bodyUrl = req.body.url;
-    const bodyShortUrl = req.body.shorturl;
+    if (!bodyUrl || typeof bodyUrl !== 'string') {
+        return res.status(400).json({ error: "URL is required and must be a string" });
+    }
 
-    // Check for valid url string with RegeX
-    let urlRegex = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/);
+    const urlRegex = new RegExp(/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/);
 
-    if (!bodyUrl.match(urlRegex)) {
-        return res.json({ error: "Invalid URL" });
+    if (!urlRegex.test(bodyUrl)) {
+        return res.status(400).json({ error: "Invalid URL format" });
     }
 
 
