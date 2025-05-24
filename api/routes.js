@@ -1,6 +1,7 @@
 const express = require('express');
 const apiRouter = express.Router();
-const Url = require("./models/urlModel");
+// Updated to use specific functions from urlModel.js
+const { findUrlByShortUrl, saveUrl } = require("./models/urlModel");
 const uuidv4 = require('uuid').v4;
 
 apiRouter.use(express.json());
@@ -30,20 +31,21 @@ apiRouter.post('/shorten', async (req, res) => {
         }
 
          // Do a while loop until we find the unique uuid in db
-         
         let genUrl = generateCustomUuid();
-        let urlExists = await Url.find({short_url: genUrl});
-        while(urlExists.length != 0) {
-            // regenerate the uuid and check again.
-            let urlExists = await Url.find({short_url: genUrl});
-            urlExists = await Url.find({ short_url: genUrl});
+        let urlExists = await findUrlByShortUrl(genUrl); // Use findUrlByShortUrl
+        // Loop while urlExists is not null (meaning a URL was found)
+        while(urlExists !== null) { 
+            genUrl = generateCustomUuid(); // Regenerate UUID
+            urlExists = await findUrlByShortUrl(genUrl); // Check again
         }
         
-        // Create new entry in db
-        const result = await Url.create({
-            original_url: bodyUrl,
-            short_url: genUrl,
-        });
+        // Create new entry in db using saveUrl
+        // Assuming 'userBelongs' is false for URLs created via this general route
+        const result = await saveUrl(bodyUrl, genUrl, false);
+
+        if (!result) { // saveUrl might throw an error, or could return null on failure (depending on impl.)
+            return res.status(500).json({ error: "Failed to create short URL" });
+        }
 
         res.json({
             info: "Short Url created successfully",
@@ -52,18 +54,20 @@ apiRouter.post('/shorten', async (req, res) => {
         });
     }
 
-    else {
+    else { // Logic for custom short URL
 
-        // check if the url alread exist in the database
-        const urlExists = await Url.find({ short_url: bodyShortUrl });
+        // check if the custom short url already exists in the database
+        const urlExists = await findUrlByShortUrl(bodyShortUrl); // Use findUrlByShortUrl
         
-        if(urlExists.length == 0) {
+        if(urlExists === null) { // If null, the URL does not exist
 
-            // Create new entry in db
-            const result = await Url.create({
-                original_url: bodyUrl,
-                short_url: bodyShortUrl.toString()
-            });
+            // Create new entry in db using saveUrl
+            // Assuming 'userBelongs' is false for URLs created via this general route
+            const result = await saveUrl(bodyUrl, bodyShortUrl.toString(), false);
+
+            if (!result) {
+                return res.status(500).json({ error: "Failed to create short URL" });
+            }
 
             res.json({
                 info: "Short Url created successfully",
@@ -72,13 +76,12 @@ apiRouter.post('/shorten', async (req, res) => {
             })
         }
 
-        else {
+        else { // Custom shortURL already exists
 
-            // custom shortURL already exist in the database
             res.json({
                 info: "the shortened url already exists, try new one",
-                original_url: urlExists[0].original_url,
-                short_url: `https://zippy.up.railway.app/${urlExists[0].short_url}`,
+                original_url: urlExists.original_url, // Access property directly
+                short_url: `https://zippy.up.railway.app/${urlExists.short_url}`, // Access property directly
                 });
         }
     }
@@ -89,20 +92,17 @@ apiRouter.get('/:url', async (req, res) => {
 
     const reqUrl = req.params.url;
 
-    // Read from the database
-    const urlExists = await Url.find({ short_url: reqUrl });
+    // Read from the database using findUrlByShortUrl
+    const urlExists = await findUrlByShortUrl(reqUrl);
     
-    if(urlExists.length == 0) {
-        res.json({
+    if(urlExists === null) { // If null, URL not found
+        res.status(404).json({ // Send 404 for not found
             error: 'The requested Url is not found'
         });
     }
     else {
-        
-        res.redirect(urlExists[0].original_url);
+        res.redirect(urlExists.original_url); // Access property directly
     }
-
-    
 })
 
 apiRouter.get('/', (req, res) => {
