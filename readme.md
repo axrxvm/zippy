@@ -13,7 +13,7 @@ An Instance haven't been made live untill now. You can host it as per your needs
   - **NPM**: Version 9 or higher
 
 - **Getting latest files**:
-  - **Using Git**: Type `git clone https://github.com/AaravMehta59/zippy.git` in your terminal.
+  - **Using Git**: Type `git clone https://github.com/axrxvm/zippy.git` in your terminal.
   - **Mannual Labour**: Download the latest zip, and upzip it in your desired location.
 
 - **How to start on your machine**
@@ -102,7 +102,7 @@ An Instance haven't been made live untill now. You can host it as per your needs
 
 #### Endpoint: GET /
 
-- **Description**: A simple welcome message for the LinkZip service.
+- **Description**: A simple welcome message for the Zippy service.
 
 - **Request**:
   - **Method**: GET
