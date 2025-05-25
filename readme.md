@@ -4,7 +4,7 @@ Zippy is a minimalist and efficient URL shortening service designed for simplici
 
 ### Production URL
 
-An Instance haven't been made live untill now. You can host it as per your needs!
+[ZIPPY - HOSTED ON RENDER](https://zippy-bv9u.onrender.com/)
 
 ### Self-Hosting
 

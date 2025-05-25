@@ -50,7 +50,7 @@ apiRouter.post('/shorten', async (req, res) => {
         res.json({
             info: "Short Url created successfully",
             original_url: result.original_url,
-            short_url: `https://zippy.up.railway.app/${result.short_url}`,
+            short_url: `https://zippy-bv9u.onrender.com//${result.short_url}`,
         });
     }
 
@@ -72,7 +72,7 @@ apiRouter.post('/shorten', async (req, res) => {
             res.json({
                 info: "Short Url created successfully",
                 original_url: result.original_url,
-                short_url: `https://zippy.up.railway.app/${result.short_url}`
+                short_url: `https://zippy-bv9u.onrender.com//${result.short_url}`
             })
         }
 
@@ -81,7 +81,7 @@ apiRouter.post('/shorten', async (req, res) => {
             res.json({
                 info: "the shortened url already exists, try new one",
                 original_url: urlExists.original_url, // Access property directly
-                short_url: `https://zippy.up.railway.app/${urlExists.short_url}`, // Access property directly
+                short_url: `https://zippy-bv9u.onrender.com//${urlExists.short_url}`, // Access property directly
                 });
         }
     }
