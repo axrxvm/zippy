@@ -3,5 +3,10 @@
     "original_url": "https://itzaarav.netlify.app/",
     "short_url": "a8ff7d",
     "userBelongs": false
+  },
+  {
+    "original_url": "https://example.com",
+    "short_url": "example",
+    "userBelongs": false
   }
 ]
